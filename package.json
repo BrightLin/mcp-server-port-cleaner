@@ -1,0 +1,28 @@
+{
+  "name": "mcp-server-port-cleaner",
+  "version": "0.0.1",
+  "description": "MCP server for clean existing port",
+  "license": "MIT",
+  "author": "Bright.lin",
+  "type": "module",
+  "bin": {
+    "mcp-server-port-cleaner": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "prepare": "npm run build",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.0.1",
+    "zod-to-json-schema": "^3.24.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "shx": "^0.3.4",
+    "typescript": "^5.6.2"
+  }
+}
