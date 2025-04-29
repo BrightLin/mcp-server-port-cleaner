@@ -5,13 +5,36 @@ Node.js server implementing Model Context Protocol (MCP) for port cleanup operat
 ## Features
 
 - Finds and terminates processes occupying specified ports
+- Scans and lists all processes occupying specified ports (cross-platform support)
 - Safe input parameter validation using Zod schema
 - Detailed error handling and response formatting
 - Standard MCP protocol compliance for tool registration and request processing
 
 ## Tools
 
-### port_cleaner
+### port_scan
+
+**Description**: Scans and lists all processes occupying a specified port (cross-platform support).
+
+**Input Parameters**:
+
+```json
+{
+  "port": {
+    "type": "integer",
+    "description": "scan process by specify port",
+    "minimum": 1,
+    "maximum": 65535
+  }
+}
+```
+
+**Response**:
+- Success: Returns list of processes with details (PID, name, user, protocol)
+- Failure: Returns error information
+- Port not occupied: Returns appropriate notification
+
+### port_clean
 
 **Description**: Finds and terminates processes occupying a specified port to resolve development environment port conflicts.
 
@@ -21,7 +44,7 @@ Node.js server implementing Model Context Protocol (MCP) for port cleanup operat
 {
   "port": {
     "type": "integer",
-    "description": "Port number to clean",
+    "description": "clean process by specify port",
     "minimum": 1,
     "maximum": 65535
   }
@@ -35,7 +58,7 @@ Node.js server implementing Model Context Protocol (MCP) for port cleanup operat
 
 ## Usage Examples
 
-### With Claude Desktop
+### With Claude Desktop or Trae.cn
 
 #### Docker Configuration
 
@@ -80,11 +103,12 @@ and then:
 The server implements the following components:
 
 1. **PortCleanerService**: Core business logic for port cleanup operations
-2. **MCP Server Integration**: Standard MCP protocol implementation with:
-   - Tool registration (`port_cleaner`)
+2. **PortScannerService**: Cross-platform port scanning functionality
+3. **MCP Server Integration**: Standard MCP protocol implementation with:
+   - Tool registration (`port_clean`, `port_scan`)
    - Request handling
    - Input validation
-3. **Error Handling**: Comprehensive error handling at both service and server levels
+4. **Error Handling**: Comprehensive error handling at both service and server levels
 
 ## Error Handling
 
@@ -95,9 +119,11 @@ The server provides detailed error responses in all failure scenarios:
 
 ## Development Notes
 
-- The service uses `lsof` and `kill` commands which are Linux/Unix specific
-- For Windows compatibility, alternative port management commands would be needed
-- The current implementation terminates processes with SIGKILL (-9)
+- The service uses platform-specific commands:
+  - Linux/Unix: `lsof`, `kill`, `netstat`
+  - Windows: `netstat`, `tasklist`, `taskkill`
+- Cross-platform compatibility implemented with process detection
+- The cleanup implementation terminates processes with SIGKILL (-9)
 
 ## License
 
