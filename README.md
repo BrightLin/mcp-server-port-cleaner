@@ -57,6 +57,23 @@ TODO
 }
 ```
 
+or install globally:
+
+```bash
+npm install -g mcp-server-port-cleaner
+```
+
+and then:
+
+```json
+{
+  "mcpServers": {
+    "port-cleaner": {
+      "command": "mcp-server-port-cleaner"
+    }
+  }
+}
+
 ## Implementation Details
 
 The server implements the following components:
